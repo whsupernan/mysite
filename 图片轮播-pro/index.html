@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <title>Document</title>
+    <style type="text/css">
+      ul{
+        list-style:none;
+        margin:0px;
+        padding: 0px;
+      }
+     ul.nav li{
+        float:left;
+        border:1px solid #000000;
+        margin-right:10px;
+        width:30px;
+        height: 30px;
+        text-align:center;
+        line-height:30px;
+        position:relative;
+        left:450px;
+        top:-60px;
+      }
+      ul.nav li.current{
+        background-color:green;
+      }
+      ul.pics{
+        list-style:none;
+        margin:0px;
+        padding: 0px;
+        width:590px;
+        height:470px;
+        overflow:hidden;
+      }
+    </style>
+</head>
+<body>
+<div id="app">
+<ul class="pics">
+  <!-- <li v-show="pics[0].isCurrent==true"><img src="images/1.jpg" alt=""></li>
+  <li v-show="pics[1].isCurrent==true"><img src="images/2.jpg" alt=""></li>
+  <li v-show="pics[2].isCurrent==true"><img src="images/3.jpg" alt=""></li> -->
+  <template v-for="(pic,index) in pics">
+    <li v-show="pics[index].isCurrent==true"><img v-bind:src="pic.url" alt=""></li>
+  </template>
+</ul>
+    <ul class="nav">
+        <!-- <li v-bind:class="{'current':isCurrent1}">1</li>用v-bind绑定class后面和和后面的对象表达式之后，使得current类的有效与否，完全由变量isCurrent决定
+        <li v-bind:class="{'current':isCurrent2}">2</li>
+        <li v-bind:class="{'current':isCurrent3}">3</li> -->
+
+        <!-- <li v-bind:class="{'current':pics[0].isCurrent}"></li>
+        <li v-bind:class="{'current':pics[1].isCurrent}">2</li>
+        <li v-bind:class="{'current':pics[2].isCurrent}">3</li> -->
+        <template v-for="(pic,index) in pics">
+        <li v-bind:class="{'current':pics[index].isCurrent}">{{ index+1 }}</li>
+        </template>
+    </ul>
+</div>
+<script src="vue.js"></script>
+<script>
+var myData = {
+    // isCurrent1:true,
+    // isCurrent2:false,
+    // isCurrent3:false
+    pics:[
+      {
+        url:"images/1.jpg",
+        isCurrent:false
+      },
+      {
+        url:"images/2.jpg",
+        isCurrent:false
+      },
+      {
+        url:"images/3.jpg",
+        isCurrent:true
+      }
+    ]
+};
+
+function changeNo(){
+    if(myData.pics[0].isCurrent == true){//如果三秒钟之前第一个li具有绿色背景，那么三秒钟后就应该将该背景移到第二个li
+    myData.pics[0].isCurrent = false;//去掉第一个li的背景
+    myData.pics[1].isCurrent = true;//加上第二个li的背景
+   }
+   else if(myData.pics[1].isCurrent == true){
+    myData.pics[1].isCurrent = false;//去掉第二个li的背景
+    myData.pics[2].isCurrent = true;//加上第三个li的背景
+   }
+   else{//如果三秒钟之前第一个li具有绿色背景，那么三秒钟后就应该将该背景移到第一个li
+    myData.pics[2].isCurrent = false;
+    myData.pics[0].isCurrent = true;
+   }
+}
+var app = new Vue({
+    el:"#app",
+    data:myData,
+    created:function(){
+        setInterval(changeNo, 2000);
+    }
+})
+</script>
+</body>
+</html>
